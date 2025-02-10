@@ -1,76 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'screens/identification_screen.dart';
+import 'screens/vin_input_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  // Ensure Flutter bindings are initialized before any async work.
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Attempt to get a previously saved userId.
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String? userId = prefs.getString('userId');
+
+  // Start the app and decide which screen to show first.
+  runApp(MyApp(initialUserId: userId));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String? initialUserId;
 
+  const MyApp({Key? key, required this.initialUserId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'CarOnSale Flutter Challenge',
       theme: ThemeData(
-
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-
-        title: Text(widget.title),
-      ),
-      body: Center(
-
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      // If a userId exists, start with the VIN input screen;
+      // otherwise, show the identification screen.
+      home: initialUserId == null
+          ? const IdentificationScreen()
+          : VinInputScreen(userId: initialUserId!),
+      // Optionally, you can define named routes if your app grows in complexity.
+      routes: {
+        '/identification': (context) => const IdentificationScreen(),
+        '/vin': (context) =>
+            VinInputScreen(userId: initialUserId ?? 'defaultUserId'),
+        // Other routes can be added here.
+      },
     );
   }
 }
