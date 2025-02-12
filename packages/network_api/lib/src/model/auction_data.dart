@@ -1,5 +1,5 @@
-import 'dart:convert';
 
+// Response for the response code 200
 class AuctionData {
   final int id;
   final String feedback;
@@ -47,7 +47,7 @@ class AuctionData {
     make: json["make"],
     model: json["model"],
     externalId: json["externalId"],
-    fkSellerUser: "fkSellerUser",//json["_fk_sellerUser"],
+    fkSellerUser: json["_fk_sellerUser"],
     price: json["price"],
     positiveCustomerFeedback: json["positiveCustomerFeedback"],
     fkUuidAuction: json["_fk_uuid_auction"],
@@ -74,11 +74,6 @@ class AuctionData {
     "origin": origin,
     "estimationRequestId": estimationRequestId,
   };
-
-  static List<AuctionData> feedbackRequestsFromJson(String str) =>
-      List<AuctionData>.from(json.decode(str).map((x) => AuctionData.fromJson(x)));
-
-  static String feedbackRequestsToJson(List<AuctionData> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 
 }
