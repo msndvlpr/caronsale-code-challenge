@@ -1,12 +1,12 @@
 import 'package:auction_repository/auction_repository.dart';
-import 'package:caronsale_code_challenge/auction/bloc/auction_data_bloc.dart';
-import 'package:caronsale_code_challenge/auction/view/vehicle_selection_screen.dart';
+import 'package:caronsale_code_challenge/vehicle_auction/bloc/auction_data_bloc.dart';
+import 'package:caronsale_code_challenge/vehicle_auction/view/vehicle_selection_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:network_api/network_api_service.dart';
 
 import '../../utils/data_validator.dart';
+import '../model/auction_data_entity.dart';
 import 'auction_details_screen.dart';
 
 class VehicleLookupScreen extends StatelessWidget {
@@ -46,8 +46,9 @@ class VehicleLookup extends StatelessWidget {
           BlocListener<AuctionDataBloc, AuctionDataState>(
             listener: (context, state) {
               if (state is AuctionDataStateSuccess) {
+                final uiData = AuctionDataEntity.fromAuctionData(state.auctionData, locale: 'de_DE');
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (_) => AuctionVehicleDetailsScreen(auctionData: state.auctionData)));
+                  builder: (_) => AuctionVehicleDetailsScreen(auctionDataEntity: uiData)));
 
               } else if (state is AuctionDataStateMultipleChoice) {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(

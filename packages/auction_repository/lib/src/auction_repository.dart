@@ -19,7 +19,7 @@ class AuctionRepository {
       throw Exception('Error loading data, please contact the customer support team.');
 
     } catch (e) {
-      throw Exception('Error loading data, please try again in a moment.');
+      throw Exception('Error loading data, please try again shortly.');
 
     }
   }
@@ -37,7 +37,7 @@ class AuctionRepository {
       throw Exception('Error loading data, please contact the customer support team.');
 
     } catch (e) {
-      throw Exception('Error loading data, please try again in a moment.');
+      throw Exception('Error loading data, please try again shortly.');
 
     }
   }

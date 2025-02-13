@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:network_api/src/mock_http_auth_handler.dart';
 import 'package:network_api/src/model/error_response.dart';
 import 'package:network_api/src/model/vehicle_option_items.dart';
-import 'cos_challenge.dart';
+import 'mock_http_handler.dart';
 import 'model/auction_data.dart';
 
 class NetworkException implements Exception {
@@ -20,7 +21,7 @@ class NetworkApiService {
   Future<dynamic> getAuctionData(String vin, String userId) async {
     try {
       final queryParams = {'vin': vin};
-      final uri = Uri.https(baseUrl, '/api/endpoint1', queryParams);
+      final uri = Uri.https(baseUrl, '/api/vin-lookup', queryParams);
       final headers = {CosChallenge.user: userId};
       final timeOut = const Duration(seconds: 10);
       final response = await CosChallenge.httpClient.get(uri, headers: headers).timeout(timeOut);
@@ -60,7 +61,7 @@ class NetworkApiService {
   Future<dynamic> getAuctionVehicle(String eid, String userId) async {
     try {
       final queryParams = {'eid': eid};
-      final uri = Uri.https(baseUrl, '/api/endpoint2', queryParams);
+      final uri = Uri.https(baseUrl, '/api/vehicle-auction', queryParams);
       final headers = {CosChallenge.user: userId};
       final timeOut = const Duration(seconds: 10);
       final response = await CosChallenge.httpClient.get(uri, headers: headers).timeout(timeOut);
@@ -76,18 +77,50 @@ class NetworkApiService {
 
       } else {
         debugPrint('Error ${response.statusCode}: ${response.reasonPhrase}');
-        throw NetworkException('Error loading the data, please try again in a moment.');
+        throw NetworkException('There was an issue processing your request. Please try again shortly.');
 
       }
     } on SocketException {
-      throw NetworkException('No Internet connection, please check your network.');
+      throw NetworkException('No Internet connection, please check your network status.');
 
     } on TimeoutException {
-      throw NetworkException('The request took too long to process, please try again in a moment.');
+      throw NetworkException('The request took too long to process, please try again shortly.');
 
     } catch (e) {
       debugPrint('error: $e');
-      throw NetworkException('Error loading data, please try again in a moment.');
+      throw NetworkException('Error loading data, please try again shortly.');
+
+    }
+  }
+
+  Future<String> postUserAuthenticationInfo(String credentials) async {
+    try {
+
+      final body = jsonEncode({'credentials': credentials});
+      final uri = Uri.https(baseUrl, '/api/login');
+      final headers = {'Content-Type': 'application/json'};
+      final timeOut = const Duration(seconds: 10);
+      final loginResponse = await MockHttpAuthHandler.httpClient.post(uri, headers: headers, body: body).timeout(timeOut);
+
+      if (loginResponse.statusCode == 200) {
+        // Parse success JSON to login data
+        final token = jsonDecode(loginResponse.body)['token'];
+        return token;
+
+      } else {
+        debugPrint('Error ${loginResponse.statusCode}: ${loginResponse.reasonPhrase}');
+        throw NetworkException('There was an issue processing your request. Please try again shortly.');
+
+      }
+    } on SocketException {
+      throw NetworkException('No Internet connection, please check your network status.');
+
+    } on TimeoutException {
+      throw NetworkException('The request took too long to process, please try again shortly.');
+
+    } catch (e) {
+      debugPrint('error: $e');
+      throw NetworkException('Error loading data, please try again shortly.');
 
     }
   }

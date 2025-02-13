@@ -1,6 +1,5 @@
 import 'package:caronsale_code_challenge/home/widget/home_tab_button.dart';
-import 'package:caronsale_code_challenge/identification/view/user_identification_screen.dart';
-import 'package:caronsale_code_challenge/auction/view/vehicle_lookup_screen.dart';
+import 'package:caronsale_code_challenge/vehicle_auction/view/vehicle_lookup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

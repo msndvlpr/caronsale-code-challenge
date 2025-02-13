@@ -26,7 +26,7 @@ class CosChallenge {
   static const user = 'user';
 
   /// ? This is optional field.
-  /// Vehicle identification number (VIN) length is 17.
+  /// Vehicle user_authentication number (VIN) length is 17.
   /// Reference https://wikipedia.org/wiki/Vehicle_identification_number
   /// Also an optional constant, you can use it in additional task
   /// for validating input values on the fetch request page. For example:
@@ -45,7 +45,7 @@ class CosChallenge {
   /// Here's a short summary of what you can expect and/or have to handle:
   /// * If the request headers are missing, the [httpClient] will throw a
   /// [ClientException] with the message 'Auth'. You have to provide any kind of
-  /// unique and persistent user identification as the value of "user" key in
+  /// unique and persistent user user_authentication as the value of "user" key in
   /// the request headers.
   ///
   /// * Request can be timed out — the [httpClient] will throw a

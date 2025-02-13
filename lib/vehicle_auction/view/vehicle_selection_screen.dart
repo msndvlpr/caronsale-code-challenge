@@ -1,50 +1,6 @@
-/*import 'package:flutter/material.dart';
-import 'package:network_api/network_api_service.dart';
-
-import 'auction_details_screen.dart';
-
-class VehicleSelectionScreen extends StatelessWidget {
-
-  final VehicleOptionItems vehicleOptions;
-  const VehicleSelectionScreen({super.key, required this.vehicleOptions});
-
-  void _onVehicleSelected(BuildContext context, VehicleOption selectedOption) {
-    // You might want to re-fetch auction data using the selected vehicle's externalId,
-    // or simply pass the chosen vehicle option to the next screen.
-    // For demonstration, we simulate converting the option into AuctionData.
-    // Alternatively, call a new API request using selectedOption.externalId.
-
-    /*Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (_) => AuctionDetailsScreen(auctionData: null)
-    ));*/
-  }
-
-  // todo
-  // sort based on similarity and show indicator for sim number
-  // upon pressing an item fetch another API call and then navigate to Auction screen with AuctionData
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Select the Correct Vehicle')),
-      body: ListView.builder(
-        itemCount: vehicleOptions.items.length,
-        itemBuilder: (context, index) {
-          final option = vehicleOptions.items[index];
-          return Card(
-            child: ListTile(
-              title: Text('${option.make} ${option.model}'),
-              subtitle: Text('${option.containerName}\nSimilarity: ${option.similarity}'),
-              onTap: () => _onVehicleSelected(context, option),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}*/
-
 import 'package:auction_repository/auction_repository.dart';
-import 'package:caronsale_code_challenge/auction/bloc/auction_data_bloc.dart';
+import 'package:caronsale_code_challenge/vehicle_auction/bloc/auction_data_bloc.dart';
+import 'package:caronsale_code_challenge/vehicle_auction/model/auction_data_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:network_api/network_api_service.dart';
@@ -83,9 +39,9 @@ class AuctionVehicleSelection extends StatelessWidget {
           BlocListener<AuctionDataBloc, AuctionDataState>(
             listener: (context, state) {
               if (state is AuctionDataStateSuccess) {
+                final uiData = AuctionDataEntity.fromAuctionData(state.auctionData, locale: 'de_DE');
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (_) =>
-                        AuctionVehicleDetailsScreen(auctionData: state.auctionData)));
+                    builder: (_) => AuctionVehicleDetailsScreen(auctionDataEntity: uiData)));
 
               } else if (state is AuctionDataStateMultipleChoice) {
                 final errorMessage = 'An error has occurred, please try again in a moment.';
@@ -116,12 +72,30 @@ class AuctionVehicleSelection extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final vehicle = options.items[index];
                     return Card(
-                      child: ListTile(
-                        title: Text('${vehicle.make} ${vehicle.model}'),
-                        subtitle: Text('${vehicle.containerName}\nSimilarity: ${vehicle.similarity}'),
-                        onTap: () {
-                          _onVehicleSelected(context, vehicle.externalId);
-                        },
+                      elevation: 3,
+                      margin: EdgeInsets.symmetric(vertical: 8),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: ListTile(
+                          leading: Icon(Icons.arrow_forward_ios_rounded, size: 16,),
+                          trailing: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              CircularProgressIndicator(
+                                value: vehicle.similarity / 100,
+                                backgroundColor: Colors.grey[300],
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                                strokeWidth: 6,
+                              ),
+                              Text("${vehicle.similarity.toInt()}%", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                          title: Text('${vehicle.make} ${vehicle.model}'),
+                          subtitle: Text(vehicle.containerName),
+                          onTap: () {
+                            _onVehicleSelected(context, vehicle.externalId);
+                          },
+                        ),
                       ),
                     );
                   },

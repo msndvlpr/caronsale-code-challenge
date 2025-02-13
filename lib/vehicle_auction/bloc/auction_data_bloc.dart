@@ -54,7 +54,7 @@ class AuctionDataBloc extends Bloc<AuctionDataEvent, AuctionDataState> {
       } else if(data is ErrorResponse){
         emit(AuctionDataStateFailure(errorResponse: data));
       } else {
-        emit(AuctionDataStateException(errorMessage: "No data available, please try again in a moment."));
+        emit(AuctionDataStateException(errorMessage: "No data available, please try again shortly."));
       }
 
     } catch (e) {
