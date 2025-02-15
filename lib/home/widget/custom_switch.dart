@@ -13,9 +13,9 @@ class CustomSwitch extends StatelessWidget {
       children: [
         Text(
           value ? "Dark" : "Light",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: value ? Colors.white38 : Colors.black54),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: value ? Colors.white38 : Colors.black54),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
         GestureDetector(
           onTap: () => onChanged(!value),
           child: AnimatedContainer(
@@ -25,29 +25,29 @@ class CustomSwitch extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
               color: value ? Colors.black : Colors.white,
-              border: Border.all(color: Colors.grey, width: 1.5),
+              border: Border.all(color: Colors.grey, width: 1.3),
             ),
             child: Stack(
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Icon(
                       Icons.wb_sunny,
                       color: value ? Colors.white30 : Colors.black,
-                      size: 24,
+                      size: 22,
                     ),
                   ),
                 ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Icon(
                       Icons.nightlight_round,
                       color: value ? Colors.white : Colors.black26,
-                      size: 24,
+                      size: 22,
                     ),
                   ),
                 ),
@@ -55,8 +55,8 @@ class CustomSwitch extends StatelessWidget {
                   duration: const Duration(milliseconds: 300),
                   alignment: value ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
-                    width: 34,
-                    height: 34,
+                    width: 32,
+                    height: 32,
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primary,
                       shape: BoxShape.circle,

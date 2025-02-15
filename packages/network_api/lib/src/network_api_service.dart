@@ -96,7 +96,7 @@ class NetworkApiService {
   Future<String> postUserAuthenticationInfo(String credentials) async {
     try {
 
-      final body = jsonEncode({'credentials': credentials});
+      final body = jsonEncode({'auth': credentials});
       final uri = Uri.https(baseUrl, '/api/login');
       final headers = {'Content-Type': 'application/json'};
       final timeOut = const Duration(seconds: 10);
@@ -107,10 +107,12 @@ class NetworkApiService {
         final token = jsonDecode(loginResponse.body)['token'];
         return token;
 
-      } else {
-        debugPrint('Error ${loginResponse.statusCode}: ${loginResponse.reasonPhrase}');
-        throw NetworkException('There was an issue processing your request. Please try again shortly.');
+      } else if (loginResponse.statusCode == 401 || loginResponse.statusCode == 403) {
+        final error = jsonDecode(loginResponse.body)['message'];
+        throw NetworkException(error);
 
+      } else {
+        throw NetworkException('There was an issue processing your request, please try again shortly.');
       }
     } on SocketException {
       throw NetworkException('No Internet connection, please check your network status.');
@@ -118,9 +120,8 @@ class NetworkApiService {
     } on TimeoutException {
       throw NetworkException('The request took too long to process, please try again shortly.');
 
-    } catch (e) {
-      debugPrint('error: $e');
-      throw NetworkException('Error loading data, please try again shortly.');
+    } on NetworkException catch (e) {
+      throw NetworkException(e.message);
 
     }
   }

@@ -25,7 +25,6 @@ class HomeTabButton extends StatelessWidget {
 
     return TextButton(
       onPressed: () {
-        context.read<HomeCubit>().setTab(value);
       },
       style: TextButton.styleFrom(
         foregroundColor: isSelected ? activeColor : inactiveColor,

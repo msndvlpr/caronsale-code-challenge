@@ -11,7 +11,6 @@ class AuctionVehicleDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Auction Details')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Material(

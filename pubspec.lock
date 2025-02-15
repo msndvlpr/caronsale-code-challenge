@@ -414,7 +414,7 @@ packages:
     source: hosted
     version: "6.1.2"
   secure_storage_repository:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "packages/secure_storage_repository"
       relative: true

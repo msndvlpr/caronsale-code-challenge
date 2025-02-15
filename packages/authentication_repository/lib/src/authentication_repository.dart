@@ -9,8 +9,8 @@ class AuthenticationRepository {
   final SecureStorageRepository _secureStorageRepository;
 
   AuthenticationRepository({
-    required NetworkApiService? networkApiService,
-    required SecureStorageRepository? secureStorageRepository
+    NetworkApiService? networkApiService,
+    SecureStorageRepository? secureStorageRepository
   })
       : _networkApiService = networkApiService ?? NetworkApiService(),
         _secureStorageRepository = secureStorageRepository ?? SecureStorageRepository();
@@ -19,9 +19,7 @@ class AuthenticationRepository {
       String username, String password) async {
     try {
       // Encrypt the username and password before sending to backend
-      final rsa = RSACrypto(publicKeyPem);
-      String encryptedUserCredentials = rsa.encrypt("$username:$password");
-      print("msn encs" + encryptedUserCredentials);
+      String encryptedUserCredentials = encryptData("$username:$password");
 
       final token = await _networkApiService.postUserAuthenticationInfo(encryptedUserCredentials);
       if (token.isNotEmpty) {
@@ -29,9 +27,7 @@ class AuthenticationRepository {
         // Storing username and successful token resolution to the local secure storage
         await _secureStorageRepository.write(storageKeyToken, token);
         await _secureStorageRepository.write(storageKeyUserId, username);
-        print(token); //todo
-        final d = await _secureStorageRepository.read(storageKeyToken);
-        print(d);
+
         return token;
       } else {
         throw Exception("Error authenticating user, please try again shortly.");

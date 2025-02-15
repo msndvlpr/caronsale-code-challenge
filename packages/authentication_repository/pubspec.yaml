@@ -12,7 +12,6 @@ dependencies:
   secure_storage_repository:
     path: ../secure_storage_repository
   encrypt: ^5.0.3
-  pointycastle: ^3.9.1
 
 dev_dependencies:
   mocktail: ^1.0.4

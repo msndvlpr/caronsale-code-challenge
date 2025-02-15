@@ -23,6 +23,8 @@ dependencies:
     path: packages/network_api
   authentication_repository:
     path: packages/authentication_repository
+  secure_storage_repository:
+    path: packages/secure_storage_repository
 
 dev_dependencies:
   flutter_test:

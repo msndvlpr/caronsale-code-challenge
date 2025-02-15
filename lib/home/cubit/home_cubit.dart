@@ -6,12 +6,13 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeState());
 
-  void setTab(HomeTab tab) =>
-      emit(HomeState(selectedTab: tab, isDark: state.isDark));
+  //todo
+  /*void setTab(HomeTab tab) =>
+      emit(HomeState(selectedTab: tab, isDark: state.isDark));*/
 
   void setTheme(bool? isDark) => emit(HomeState(
       selectedTab: state.selectedTab, isDark: isDark ?? state.isDark));
 
-  void setDataCacheState(bool isCleared) =>
-      emit(HomeState(isCacheCleared: isCleared, isDark: state.isDark));
+  /*void setDataCacheState(bool isCleared) =>
+      emit(HomeState(isCacheCleared: isCleared, isDark: state.isDark));*/
 }

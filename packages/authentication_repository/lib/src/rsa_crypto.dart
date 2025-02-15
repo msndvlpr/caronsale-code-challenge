@@ -1,25 +1,17 @@
 import 'dart:convert';
+
 import 'package:encrypt/encrypt.dart';
-import 'package:pointycastle/asymmetric/api.dart';
 
+String encryptData(String text) {
 
-const publicKeyPem = '''
-  -----BEGIN PUBLIC KEY-----
-  MY_RSA_PUBLIC_KEY_SAMPLE
-  -----END PUBLIC KEY-----
-  ''';
+  final key = Key.fromUtf8('my32lengthsupersecretnooneknows1');
 
-class RSACrypto {
-  final String publicKeyString;
+  final b64key = Key.fromUtf8(base64Url.encode(key.bytes).substring(0, 32));
 
-  RSACrypto(this.publicKeyString);
+  final fernet = Fernet(b64key);
+  final encrypter = Encrypter(fernet);
 
-  /// Encrypts the given [text] using the public RSA key
-  String encrypt(String text) {
-    final publicKey = RSAKeyParser().parse(publicKeyString) as RSAPublicKey;
-    final encrypter = Encrypter(RSA(publicKey: publicKey));
+  final encrypted = encrypter.encrypt(text);
 
-    final encrypted = encrypter.encrypt(text);
-    return encrypted.base64;
-  }
+  return encrypted.base64;
 }

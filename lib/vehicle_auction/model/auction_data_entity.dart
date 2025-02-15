@@ -12,7 +12,7 @@ class AuctionDataEntity {
   final String make;
   final String model;
   final int price;
-  final bool positiveCustomerFeedback;
+  final String positiveCustomerFeedback;
   final String inspectorRequestedAt;
   final String origin;
   final String estimationRequestId;
@@ -50,7 +50,7 @@ class AuctionDataEntity {
         make: data.make,
         model: data.model,
         price: data.price,
-        positiveCustomerFeedback: data.positiveCustomerFeedback,
+        positiveCustomerFeedback: data.positiveCustomerFeedback ? 'Positive' : 'Negative',
         inspectorRequestedAt: _formatDateTime(data.inspectorRequestedAt, locale),
         origin: data.origin,
         estimationRequestId: data.estimationRequestId
