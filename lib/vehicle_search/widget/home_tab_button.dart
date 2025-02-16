@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../cubit/home_cubit.dart';
+import '../cubit/theme_cubit.dart';
 
 class HomeTabButton extends StatelessWidget {
   const HomeTabButton({
     super.key,
-    required this.groupValue,
-    required this.value,
     required this.icon,
     required this.label,
+    required this.selected
   });
 
-  final HomeTab groupValue;
-  final HomeTab value;
+
   final Widget icon;
   final String label;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
-    final bool isSelected = groupValue == value;
+    final bool isSelected = selected;
     final Color activeColor = Theme.of(context).colorScheme.primary;
     final Color inactiveColor = Colors.grey.shade600;
 

@@ -18,11 +18,11 @@ class NetworkApiService {
   final String baseUrl;
   NetworkApiService({this.baseUrl = "some-mocked-base-url"});
 
-  Future<dynamic> getAuctionData(String vin, String userId) async {
+  Future<dynamic> getAuctionData(String vin, String userId, String token) async {
     try {
       final queryParams = {'vin': vin};
       final uri = Uri.https(baseUrl, '/api/vin-lookup', queryParams);
-      final headers = {CosChallenge.user: userId};
+      final headers = {CosChallenge.user: userId, 'Authorization': 'Bearer $token'};
       final timeOut = const Duration(seconds: 10);
       final response = await CosChallenge.httpClient.get(uri, headers: headers).timeout(timeOut);
 
@@ -42,27 +42,33 @@ class NetworkApiService {
 
       } else {
         debugPrint('Error ${response.statusCode}: ${response.reasonPhrase}');
-        throw NetworkException('Error loading the data, please try again in a moment.');
+        throw NetworkException('An unknown error occurred, please try again shortly.');
 
       }
-    } on SocketException {
+    } on SocketException catch(e) {
+      debugPrint(e.message);
       throw NetworkException('No Internet connection, please check your network.');
 
-    } on TimeoutException {
-      throw NetworkException('The request took too long to process, please try again in a moment.');
+    } on TimeoutException catch(e) {
+      debugPrint(e.message!);
+      throw NetworkException('The request took too long to process, please try again shortly.');
+
+    } on HttpException catch(e) {
+      debugPrint(e.message);
+      throw NetworkException('Error loading the data, please try again shortly.');
 
     } catch (e) {
-      debugPrint('error: $e');
-      throw NetworkException('Error loading data, please try again in a moment.');
+      debugPrint(e.toString());
+      throw NetworkException('An unknown error occurred, please try again shortly.');
 
     }
   }
 
-  Future<dynamic> getAuctionVehicle(String eid, String userId) async {
+  Future<dynamic> getAuctionVehicle(String eid, String userId, String token) async {
     try {
       final queryParams = {'eid': eid};
       final uri = Uri.https(baseUrl, '/api/vehicle-auction', queryParams);
-      final headers = {CosChallenge.user: userId};
+      final headers = {CosChallenge.user: userId, 'Authorization': 'Bearer $token'};
       final timeOut = const Duration(seconds: 10);
       final response = await CosChallenge.httpClient.get(uri, headers: headers).timeout(timeOut);
 
@@ -77,18 +83,24 @@ class NetworkApiService {
 
       } else {
         debugPrint('Error ${response.statusCode}: ${response.reasonPhrase}');
-        throw NetworkException('There was an issue processing your request. Please try again shortly.');
+        throw NetworkException('An unknown error occurred, please try again shortly.');
 
       }
-    } on SocketException {
-      throw NetworkException('No Internet connection, please check your network status.');
+    } on SocketException catch(e) {
+      debugPrint(e.message);
+      throw NetworkException('No Internet connection, please check your network.');
 
-    } on TimeoutException {
+    } on TimeoutException catch(e) {
+      debugPrint(e.message);
       throw NetworkException('The request took too long to process, please try again shortly.');
 
+    } on HttpException catch(e) {
+      debugPrint(e.message);
+      throw NetworkException('Error loading the data, please try again shortly.');
+
     } catch (e) {
-      debugPrint('error: $e');
-      throw NetworkException('Error loading data, please try again shortly.');
+      debugPrint(e.toString());
+      throw NetworkException('An unknown error occurred, please try again shortly.');
 
     }
   }
@@ -112,16 +124,25 @@ class NetworkApiService {
         throw NetworkException(error);
 
       } else {
-        throw NetworkException('There was an issue processing your request, please try again shortly.');
-      }
-    } on SocketException {
-      throw NetworkException('No Internet connection, please check your network status.');
+        debugPrint('Error ${loginResponse.statusCode}: ${loginResponse.reasonPhrase}');
+        throw NetworkException('An unknown error occurred, please try again shortly.');
 
-    } on TimeoutException {
+      }
+    } on SocketException catch(e) {
+      debugPrint(e.message);
+      throw NetworkException('No Internet connection, please check your network.');
+
+    } on TimeoutException catch(e) {
+      debugPrint(e.message);
       throw NetworkException('The request took too long to process, please try again shortly.');
 
-    } on NetworkException catch (e) {
-      throw NetworkException(e.message);
+    } on HttpException catch(e) {
+      debugPrint(e.message);
+      throw NetworkException('Error loading the data, please try again shortly.');
+
+    } catch (e) {
+      debugPrint(e.toString());
+      throw NetworkException('An unknown error occurred, please try again shortly.');
 
     }
   }

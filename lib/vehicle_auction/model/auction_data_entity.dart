@@ -38,7 +38,7 @@ class AuctionDataEntity {
     return DateFormat.yMMMMd(locale).add_jm().format(dateTime);
   }
 
-  /// Convert from the existing `AuctionData` model
+  // Convert from the repository layer `AuctionData` model
   factory AuctionDataEntity.fromAuctionData(AuctionData data, {String locale = 'de_DE'}) {
     return AuctionDataEntity(
         id: data.id,

@@ -1,26 +1,17 @@
-import 'package:auction_repository/auction_repository.dart';
-import 'package:caronsale_code_challenge/home/view/home_page.dart';
 import 'package:caronsale_code_challenge/vehicle_auction/bloc/auction_data_bloc.dart';
 import 'package:caronsale_code_challenge/vehicle_auction/model/auction_data_entity.dart';
+import 'package:caronsale_code_challenge/vehicle_auction/model/vehicle_options_entity.dart';
+import 'package:caronsale_code_challenge/vehicle_auction/view/auction_details_screen.dart';
+import 'package:caronsale_code_challenge/vehicle_search/widget/bottom_nav_bar.dart';
+import 'package:caronsale_code_challenge/vehicle_search/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:network_api/network_api_service.dart';
 
 class AuctionVehicleSelectionScreen extends StatelessWidget {
-  final VehicleOptionItems vehicleOptions;
+  final VehicleOptionsEntity vehicleOptionsEntity;
 
-  const AuctionVehicleSelectionScreen({super.key, required this.vehicleOptions});
-
-  @override
-  Widget build(BuildContext context) {
-    return AuctionVehicleSelection(vehicleOptionItems: vehicleOptions);
-  }
-}
-
-class AuctionVehicleSelection extends StatelessWidget {
-  final VehicleOptionItems vehicleOptionItems;
-
-  const AuctionVehicleSelection({super.key, required this.vehicleOptionItems});
+  const AuctionVehicleSelectionScreen({super.key, required this.vehicleOptionsEntity});
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +20,21 @@ class AuctionVehicleSelection extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      appBar: CustomAppBar(title: 'Vehicle Selection'),
+      bottomNavigationBar: BottomNavBar(),
       body: MultiBlocListener(
         listeners: [
           BlocListener<AuctionDataBloc, AuctionDataState>(
             listener: (context, state) {
+              if (!context.mounted) return;
+
               if (state is AuctionDataStateSuccess) {
-                final uiData = AuctionDataEntity.fromAuctionData(state.auctionData, locale: 'de_DE');
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (_) => HomePage(screen: 2, data: uiData)));
+                ScaffoldMessenger.of(context).clearSnackBars();
+                final auctionDataEntity = AuctionDataEntity.fromAuctionData(state.auctionData, locale: 'de_DE');
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => AuctionVehicleDetailsScreen(auctionDataEntity: auctionDataEntity)));
 
               } else if (state is AuctionDataStateMultipleChoice) {
-                final errorMessage = 'An error has occurred, please try again in a moment.';
+                final errorMessage = 'An error has occurred, please try again shortly.';
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage)));
 
               } else if (state is AuctionDataStateFailure) {
@@ -72,9 +67,9 @@ class AuctionVehicleSelection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 18),
                       child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: vehicleOptionItems.items.length,
+                        itemCount: vehicleOptionsEntity.items.length,
                         itemBuilder: (context, index) {
-                          final vehicle = vehicleOptionItems.items[index];
+                          final vehicle = vehicleOptionsEntity.items[index];
                           return Card(
                             elevation: 4,
                             margin: EdgeInsets.symmetric(vertical: 8),
@@ -104,11 +99,11 @@ class AuctionVehicleSelection extends StatelessWidget {
                               ),
                               subtitle: Row(
                                 children: [
-                                  Expanded(child: Text(vehicle.containerName, overflow: TextOverflow.ellipsis, maxLines: 1, softWrap: true)),
+                                  Expanded(child: Text(vehicle.name, overflow: TextOverflow.ellipsis, maxLines: 1, softWrap: true)),
                                 ],
                               ),
                               onTap: () {
-                                _onVehicleSelected(context, vehicle.externalId);
+                                _onVehicleSelected(context, vehicle.id);
                               },
                             ),
                           );

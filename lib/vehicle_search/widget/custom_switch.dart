@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomSwitch extends StatelessWidget {
+
   final bool value;
   final ValueChanged<bool> onChanged;
 
@@ -19,7 +20,7 @@ class CustomSwitch extends StatelessWidget {
         GestureDetector(
           onTap: () => onChanged(!value),
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 400),
             width: 74,
             height: 36,
             decoration: BoxDecoration(

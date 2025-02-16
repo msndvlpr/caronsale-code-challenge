@@ -1,33 +1,20 @@
 import 'package:auction_repository/auction_repository.dart';
-import 'package:caronsale_code_challenge/home/view/home_page.dart';
 import 'package:caronsale_code_challenge/vehicle_auction/bloc/auction_data_bloc.dart';
+import 'package:caronsale_code_challenge/vehicle_auction/model/vehicle_options_entity.dart';
+import 'package:caronsale_code_challenge/vehicle_auction/view/auction_details_screen.dart';
 import 'package:caronsale_code_challenge/vehicle_auction/view/vehicle_selection_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:caronsale_code_challenge/vehicle_search/cubit/theme_cubit.dart';
+import 'package:caronsale_code_challenge/vehicle_search/widget/bottom_nav_bar.dart';
+import 'package:caronsale_code_challenge/vehicle_search/widget/custom_list_tile_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../widget/custom_app_bar.dart';
 import '../../utils/data_validator.dart';
-import '../model/auction_data_entity.dart';
-import 'auction_details_screen.dart';
+import '../../vehicle_auction/model/auction_data_entity.dart';
 
-class VehicleLookupScreen extends StatelessWidget {
-  const VehicleLookupScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => AuctionDataBloc(context.read<AuctionRepository>())
-        ),
-      ],
-      child: VehicleLookup(),
-    );
-  }
-}
-
-class VehicleLookup extends StatelessWidget {
-  VehicleLookup({super.key});
+class VehicleSearchScreen extends StatelessWidget {
+  VehicleSearchScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _vinController = TextEditingController();
@@ -42,16 +29,27 @@ class VehicleLookup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(title: 'Vehicle Search', showOptionMenu: true),
+      bottomNavigationBar: BottomNavBar(),
       body: MultiBlocListener(
         listeners: [
           BlocListener<AuctionDataBloc, AuctionDataState>(
+            listenWhen: (previous, current) {
+              // Only listen when the screen is still in the widget tree
+              return ModalRoute.of(context)?.isCurrent ?? false;
+            },
             listener: (context, state) {
+              if (!context.mounted) return;
+
               if (state is AuctionDataStateSuccess) {
-                final uiData = AuctionDataEntity.fromAuctionData(state.auctionData, locale: 'de_DE');
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => HomePage(screen:2, data: uiData)));
+                final auctionDataEntity = AuctionDataEntity.fromAuctionData(state.auctionData, locale: 'de_DE');
+                ScaffoldMessenger.of(context).clearSnackBars();
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => AuctionVehicleDetailsScreen(auctionDataEntity: auctionDataEntity)));
 
               } else if (state is AuctionDataStateMultipleChoice) {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => HomePage(screen: 1, data: state.vehicleOptionItems)));
+                ScaffoldMessenger.of(context).clearSnackBars();
+                 final vehicleOptionsEntity = VehicleOptionsEntity.fromVehicleOptions(state.vehicleOptionItems);
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => AuctionVehicleSelectionScreen(vehicleOptionsEntity: vehicleOptionsEntity)));
 
               } else if (state is AuctionDataStateFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('An error occurred')));
@@ -84,7 +82,8 @@ class VehicleLookup extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 32),
-                    Text("We'll find your vehicle using the VIN. You might get an exact match or a list of similar results.", style: Theme.of(context).textTheme.bodyMedium),
+                    Text("We'll find your vehicle using the VIN. You might get an exact match or a list of similar results.",
+                        style: Theme.of(context).textTheme.bodyMedium),
                     SizedBox(height: 32),
                     TextFormField(
                       maxLength: 17,
@@ -93,7 +92,7 @@ class VehicleLookup extends StatelessWidget {
                         labelText: "Enter VIN",
                         prefixIcon: Icon(Icons.car_rental_sharp, color: Theme.of(context).colorScheme.primary),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                          focusedBorder: OutlineInputBorder( // Focused border
+                          focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0),
                           ),
@@ -106,13 +105,19 @@ class VehicleLookup extends StatelessWidget {
                       ),
                       validator: isVinValid,
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 16),
 
                     if (errorMessage != null) ...[
-                      Text(errorMessage, style: const TextStyle(color: Colors.red)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Text(errorMessage, style: const TextStyle(color: Colors.red)),
+                      ),
                       const SizedBox(height: 18),
                     ],
 
+                    CacheToggleSwitch(),
+
+                    SizedBox(height: 28),
                     isLoading
                         ? CircularProgressIndicator(color: Theme.of(context).colorScheme.primary)
                         : ElevatedButton(

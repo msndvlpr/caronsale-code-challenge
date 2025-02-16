@@ -13,6 +13,7 @@ import 'app/app.dart';
 import 'app/app_bloc_observer.dart';
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('de_DE', null);
 

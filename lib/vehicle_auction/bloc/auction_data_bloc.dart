@@ -23,7 +23,7 @@ class AuctionDataBloc extends Bloc<AuctionDataEvent, AuctionDataState> {
 
     emit(AuctionDataStateLoading());
     try {
-      final data = await auctionRepository.fetchAuctionDataByVin(event.vin, 'userId');
+      final data = await auctionRepository.fetchAuctionDataByVin(event.vin);
       if(data is AuctionData){
         emit(AuctionDataStateSuccess(auctionData: data));
 
@@ -32,12 +32,14 @@ class AuctionDataBloc extends Bloc<AuctionDataEvent, AuctionDataState> {
 
       } else if(data is ErrorResponse){
         emit(AuctionDataStateFailure(errorResponse: data));
+
       } else {
-        emit(AuctionDataStateException(errorMessage: "No data available, please try again in a moment."));
+        emit(AuctionDataStateException(errorMessage: "No data available, please try again shortly."));
+
       }
 
-    } catch (e) {
-      emit(AuctionDataStateException(errorMessage: e.toString()));
+    } on NetworkException catch (e) {
+      emit(AuctionDataStateException(errorMessage: e.message));
     }
   }
 
@@ -47,18 +49,20 @@ class AuctionDataBloc extends Bloc<AuctionDataEvent, AuctionDataState> {
 
     emit(AuctionDataStateLoading());
     try {
-      final data = await auctionRepository.fetchVehicleDataByExternalId(event.eid, 'userId');
+      final data = await auctionRepository.fetchVehicleDataByExternalId(event.eid);
       if(data is AuctionData){
         emit(AuctionDataStateSuccess(auctionData: data));
 
       } else if(data is ErrorResponse){
         emit(AuctionDataStateFailure(errorResponse: data));
+
       } else {
         emit(AuctionDataStateException(errorMessage: "No data available, please try again shortly."));
+
       }
 
-    } catch (e) {
-      emit(AuctionDataStateException(errorMessage: e.toString()));
+    } on NetworkException catch (e) {
+      emit(AuctionDataStateException(errorMessage: e.message));
     }
   }
 

@@ -1,7 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:caronsale_code_challenge/home/view/home_page.dart';
+import 'package:caronsale_code_challenge/vehicle_search/view/vehicle_search_screen.dart';
 import 'package:caronsale_code_challenge/user_authentication/bloc/user_auth_bloc.dart';
-import 'package:caronsale_code_challenge/vehicle_auction/view/vehicle_lookup_screen.dart';
+import 'package:caronsale_code_challenge/vehicle_search/view/vehicle_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,7 +38,8 @@ class _UserAuthenticationScreenState extends State<UserAuthenticationScreen> {
               if (state is UserAuthDataStateSuccess) {
                 _usernameController.clear();
                 _passwordController.clear();
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => HomePage(screen: 0)));
+                ScaffoldMessenger.of(context).clearSnackBars();
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => VehicleSearchScreen()));
 
               } else if (state is UserAuthDataStateFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage)));

@@ -9,6 +9,8 @@ environment:
 dependencies:
   network_api:
     path: ../network_api
+  secure_storage_repository:
+    path: ../secure_storage_repository
 
 dev_dependencies:
   mocktail: ^1.0.4
