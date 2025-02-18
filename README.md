@@ -1,8 +1,8 @@
-# CarOnSale Coding Challenge
+# CarOnSale Vehicle Auction App- A Coding Challenge
 
 ## Overview
 This project is a Flutter-based application for vehicle auctions, where users can search for vehicles by VIN, view auction details, and authenticate using a repository-based 
-authentication system. It also supports caching mechanisms for improved user experience in case of network failures.
+authentication system. It also supports caching mechanisms, dark theme and also UI state handling for improved user experience in case of network success or failures.
 
 ## Features
 - **User Authentication**: Uses an Authentication Repository and a mocked HTTP handler. Authentication is simulated with random success/failure responses.
@@ -17,7 +17,7 @@ authentication system. It also supports caching mechanisms for improved user exp
 lib/
 ├── app/
 │   ├── app.dart
-│   ├── app_bloc_observer.dart
+│   ..
 │
 ├── user_authentication/
 │   ├── bloc/
@@ -33,6 +33,7 @@ lib/
 │   ├── widget/
 │
 ├── vehicle_search/
+│
 ├── main.dart
 │
 packages/
@@ -46,7 +47,7 @@ test/
 assets/
 │
 pubspec.yaml
-...
+..
 ```
 
 ## Screen Flow and Features Overview:

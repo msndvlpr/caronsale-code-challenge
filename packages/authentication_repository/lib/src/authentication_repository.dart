@@ -17,13 +17,13 @@ class AuthenticationRepository {
 
   Future<String> authenticateUserByCredentials(String username, String password) async {
     try {
-      /// Encrypt the username and password before sending to backend
+      // Encrypt the username and password before sending to backend
       String encryptedUserCredentials = encryptData("$username:$password");
 
       final token = await _networkApiService.postUserAuthenticationInfo(encryptedUserCredentials);
       if (token.isNotEmpty) {
 
-        /// Storing username and successful token resolution to the local secure storage
+        // Storing username and successful token resolution to the local secure storage
         await _secureStorageApi.write(storageKeyToken, token);
         await _secureStorageApi.write(storageKeyUserId, username);
 

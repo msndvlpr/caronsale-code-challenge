@@ -87,7 +87,7 @@ class ExpandableView extends StatelessWidget {
     );
   }
 
-  /// Builds a single row for details
+  // Builds a single row for details
   Widget _buildDetailRow(String label, String value, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -116,7 +116,7 @@ class ExpandableView extends StatelessWidget {
     );
   }
 
-  /// Section titles for organization
+  // Section titles for organization
   Widget _buildSectionTitle(String title, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),

@@ -25,7 +25,7 @@ class AuctionRepository {
 
     try {
       final data = await _networkApiService.getAuctionData(vin, userId!, token!);
-        /// Store data locally persistently for cache feature
+        // Store data locally persistently for cache feature
         if(data is AuctionData){
           String auctionDataJson = jsonEncode(data.toJson());
           await _secureStorageApi.write(keyAuctionData, auctionDataJson);
@@ -46,7 +46,7 @@ class AuctionRepository {
     } on NetworkException catch (e) {
 
       if(useCache) {
-        /// If the response is any kind of error then read from cache and return cached data instead
+        // If the response is any kind of error then read from cache and return cached data instead
         final json = await _secureStorageApi.read(keyVehicleOptions);
         if (json != null) {
           final cachedVehicleOptions = VehicleOptionItems.fromJson(jsonDecode(json));
@@ -75,7 +75,7 @@ class AuctionRepository {
 
     try {
       final data = await _networkApiService.getAuctionVehicle(eid, userId!, token!);
-      /// Store data locally persistently for cache feature
+      // Store data locally persistently for cache feature
       if(data is AuctionData){
         String auctionDataJson = jsonEncode(data.toJson());
         await _secureStorageApi.write(keyAuctionData, auctionDataJson);
@@ -92,7 +92,7 @@ class AuctionRepository {
     } on NetworkException catch (e) {
 
       if(useCache) {
-        /// If the response is any kind of error then read from cache and return cached data instead
+        // If the response is any kind of error then read from cache and return cached data instead
         final json = await _secureStorageApi.read(keyAuctionData);
         if (json != null) {
           final cachedAuctionData = AuctionData.fromJson(jsonDecode(json));

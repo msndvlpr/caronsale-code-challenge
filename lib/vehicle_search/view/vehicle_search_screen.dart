@@ -1,9 +1,7 @@
-import 'package:auction_repository/auction_repository.dart';
 import 'package:caronsale_code_challenge/vehicle_auction/bloc/auction_data_bloc.dart';
 import 'package:caronsale_code_challenge/vehicle_auction/model/vehicle_options_entity.dart';
 import 'package:caronsale_code_challenge/vehicle_auction/view/auction_details_screen.dart';
 import 'package:caronsale_code_challenge/vehicle_auction/view/vehicle_selection_screen.dart';
-import 'package:caronsale_code_challenge/vehicle_search/cubit/theme_cubit.dart';
 import 'package:caronsale_code_challenge/vehicle_search/widget/bottom_nav_bar.dart';
 import 'package:caronsale_code_challenge/vehicle_search/widget/custom_list_tile_switch.dart';
 import 'package:flutter/material.dart';
