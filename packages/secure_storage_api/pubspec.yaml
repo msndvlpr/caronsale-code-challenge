@@ -1,5 +1,5 @@
-name: secure_storage_repository
-description: A repository that handles user authentication and secure storage affairs.
+name: secure_storage_api
+description: A repository that handles user authentication and secure storage works.
 version: 1.0.0+1
 publish_to: none
 
@@ -12,4 +12,6 @@ dependencies:
 
 dev_dependencies:
   mocktail: ^1.0.4
-  test: ^1.21.4
+  flutter_test:
+    sdk: flutter
+

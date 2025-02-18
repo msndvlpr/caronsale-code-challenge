@@ -1,5 +1,5 @@
 name: caronsale_code_challenge
-description: "A new Flutter project."
+description: "A new Flutter project for Car On Sale coding challenge tech assessment."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -23,12 +23,14 @@ dependencies:
     path: packages/network_api
   authentication_repository:
     path: packages/authentication_repository
-  secure_storage_repository:
-    path: packages/secure_storage_repository
+  secure_storage_api:
+    path: packages/secure_storage_api
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  bloc_test: ^10.0.0
+  mocktail: ^1.0.4
 
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.3

@@ -8,7 +8,7 @@ import 'package:caronsale_code_challenge/vehicle_search/cubit/theme_cubit.dart';
 import 'package:caronsale_code_challenge/vehicle_search/view/vehicle_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage_repository/secure_storage_repository.dart';
+import 'package:secure_storage_api/secure_storage_api.dart';
 
 import '../user_authentication/bloc/user_auth_bloc.dart';
 
@@ -16,12 +16,12 @@ class App extends StatelessWidget {
 
   final AuctionRepository auctionRepository;
   final AuthenticationRepository authenticationRepository;
-  final SecureStorageRepository secureStorageRepository;
+  final SecureStorageApi secureStorageApi;
 
   const App(
       {required this.auctionRepository,
       required this.authenticationRepository,
-      required this.secureStorageRepository,
+      required this.secureStorageApi,
       super.key});
 
   @override
@@ -30,7 +30,7 @@ class App extends StatelessWidget {
       providers: [
         RepositoryProvider<AuctionRepository>.value(value: auctionRepository),
         RepositoryProvider<AuthenticationRepository>.value(value: authenticationRepository),
-        RepositoryProvider<SecureStorageRepository>.value(value: secureStorageRepository),
+        RepositoryProvider<SecureStorageApi>.value(value: secureStorageApi),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -51,7 +51,7 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final secureStorageRepository = context.read<SecureStorageRepository>();
+    final secureStorageApi = context.read<SecureStorageApi>();
 
     return BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state)
@@ -60,7 +60,7 @@ class AppView extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: state.isDark ? ThemeData.dark() : ThemeData.light(),
         home: FutureBuilder<bool>(
-          future: _isUserAuthenticated(secureStorageRepository),
+          future: _isUserAuthenticated(secureStorageApi),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return (snapshot.data ?? false)
@@ -82,8 +82,8 @@ class AppView extends StatelessWidget {
 
   }
 
-  Future<bool> _isUserAuthenticated(SecureStorageRepository secureStorageRepository) async {
-    final token = await secureStorageRepository.read(keys.storageKeyToken);
+  Future<bool> _isUserAuthenticated(SecureStorageApi secureStorageApi) async {
+    final token = await secureStorageApi.read(keys.storageKeyToken);
     return token != null && token.isNotEmpty;
   }
 }

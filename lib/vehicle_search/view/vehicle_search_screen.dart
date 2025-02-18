@@ -35,7 +35,7 @@ class VehicleSearchScreen extends StatelessWidget {
         listeners: [
           BlocListener<AuctionDataBloc, AuctionDataState>(
             listenWhen: (previous, current) {
-              // Only listen when the screen is still in the widget tree
+              /// Only listen when the screen is still in the widget tree
               return ModalRoute.of(context)?.isCurrent ?? false;
             },
             listener: (context, state) {

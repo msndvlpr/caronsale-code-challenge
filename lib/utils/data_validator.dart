@@ -23,7 +23,6 @@ String? isVinValid(String? vin) {
     int value;
     int weight = weights[i];
 
-    // letter
     if (c.codeUnitAt(0) >= 'A'.codeUnitAt(0) &&
         c.codeUnitAt(0) <= 'Z'.codeUnitAt(0)) {
       value = values[c.codeUnitAt(0) - 'A'.codeUnitAt(0)];

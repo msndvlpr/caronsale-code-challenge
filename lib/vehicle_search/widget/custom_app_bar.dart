@@ -3,7 +3,7 @@ import 'package:caronsale_code_challenge/vehicle_search/cubit/theme_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage_repository/secure_storage_repository.dart';
+import 'package:secure_storage_api/secure_storage_api.dart';
 
 import 'custom_switch.dart';
 
@@ -88,8 +88,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ElevatedButton(
             child: const Text('Logout'),
             onPressed: () async{
-              final secureStorageRepository = context.read<SecureStorageRepository>();
-              secureStorageRepository.clearAll();
+              final secureStorageApi = context.read<SecureStorageApi>();
+              secureStorageApi.clearAll();
               Navigator.of(context).pop();
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => UserAuthenticationScreen()),

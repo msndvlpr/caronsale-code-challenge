@@ -1,5 +1,5 @@
 name: authentication_repository
-description: A repository that handles vehicle_auction related requests.
+description: A repository that handles authentication related requests.
 version: 1.0.0+1
 publish_to: none
 
@@ -9,10 +9,11 @@ environment:
 dependencies:
   network_api:
     path: ../network_api
-  secure_storage_repository:
-    path: ../secure_storage_repository
+  secure_storage_api:
+    path: ../secure_storage_api
   encrypt: ^5.0.3
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
   mocktail: ^1.0.4
-  test: ^1.21.4

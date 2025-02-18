@@ -57,6 +57,7 @@ void main() {
   "message": "Please try again in 3 seconds"
   }''';
 
+  const jsonBody200TokenResponse = '''{"token":"some-jwt-token"}''';
   const testBaseUrl = 'some-mocked-testing-url';
 
   setUp(() {
@@ -67,9 +68,9 @@ void main() {
   group('getAuctionData', () {
 
     test(
-        'GIVEN NetworkApiService as my data source WHEN http get method is called THEN should respond 200 with data',
+        'GIVEN NetworkApiService as the http handler api WHEN http get method is called with a vin THEN should respond 200 with data',
         () async {
-      when(() => mockHttpClient.get(Uri.parse(testBaseUrl)))
+      when(() => mockHttpClient.get(Uri.parse('$testBaseUrl/api/vin-lookup')))
           .thenAnswer((invocation) async {
         return Response(jsonBody200Response, 200);
       });
@@ -82,9 +83,9 @@ void main() {
     });
 
     test(
-        'GIVEN NetworkApiService as my data source WHEN http get method is called THEN should respond 300 with multiple choice data',
+        'GIVEN NetworkApiService as the http handler api WHEN http get method is called with a vin THEN should respond 300 with multiple choice data',
             () async {
-          when(() => mockHttpClient.get(Uri.parse(testBaseUrl)))
+          when(() => mockHttpClient.get(Uri.parse('$testBaseUrl/api/vin-lookup')))
               .thenAnswer((invocation) async {
             return Response(jsonBody300Response, 300);
           });
@@ -97,9 +98,9 @@ void main() {
         });
 
     test(
-        'GIVEN NetworkApiService as my data source WHEN http get method is called THEN should respond 400 with error response',
+        'GIVEN NetworkApiService as the http handler api WHEN http get method is called with a vin THEN should respond 400 with error response',
             () async {
-          when(() => mockHttpClient.get(Uri.parse(testBaseUrl)))
+          when(() => mockHttpClient.get(Uri.parse('$testBaseUrl/api/vin-lookup')))
               .thenAnswer((invocation) async {
             return Response(jsonBody400Response, 400);
           });
@@ -111,7 +112,57 @@ void main() {
           });
         });
 
-    //todo do the same for other tow methods `getAuctionVehicle` and `postUserAuthenticationInfo`
+  });
 
+  group('getAuctionVehicle', () {
+
+    test(
+        'GIVEN NetworkApiService as the http handler api WHEN http get method is called with an external id THEN should respond 200 with data',
+            () async {
+          when(() => mockHttpClient.get(Uri.parse('$testBaseUrl/api/vehicle-auction')))
+              .thenAnswer((invocation) async {
+            return Response(jsonBody200Response, 200);
+          });
+          final data = networkApiService.getAuctionVehicle('ein', 'user-id', 'token');
+          expect(data, isNotNull);
+          expect(data, isA<Future<dynamic>>());
+          data.then((result){
+            expect(result, isA<AuctionData>());
+          });
+        });
+
+    test(
+        'GIVEN NetworkApiService as the http handler api WHEN http get method is called with an external id THEN should respond 400 with error response',
+            () async {
+          when(() => mockHttpClient.get(Uri.parse('$testBaseUrl/api/vehicle-auction')))
+              .thenAnswer((invocation) async {
+            return Response(jsonBody400Response, 400);
+          });
+          final data = networkApiService.getAuctionData('ein', 'user-id', 'token');
+          expect(data, isNotNull);
+          expect(data, isA<Future<dynamic>>());
+          data.then((result){
+            expect(result, isA<ErrorResponse>());
+          });
+        });
+
+  });
+
+  group('postUserAuthenticationInfo', ()
+  {
+    test(
+        'GIVEN NetworkApiService as the http handler api WHEN http get method is called with user credentials THEN should respond 200 with token',
+            () async {
+          when(() => mockHttpClient.post(Uri.parse('$testBaseUrl/api/login')))
+              .thenAnswer((invocation) async {
+            return Response(jsonBody200TokenResponse, 200);
+          });
+          final data = networkApiService.postUserAuthenticationInfo('user-credentials');
+          expect(data, isNotNull);
+          expect(data, isA<Future<String>>());
+          data.then((result) {
+            expect(result, contains('token'));
+          });
+        });
   });
 }

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:secure_storage_repository/secure_storage_repository.dart';
+import 'package:secure_storage_api/secure_storage_api.dart';
 
 import 'app/app.dart';
 import 'app/app_bloc_observer.dart';
@@ -32,10 +32,10 @@ Future<void> main() async {
 
   final auctionRepository = AuctionRepository();
   final authenticationRepository = AuthenticationRepository();
-  final secureStorageRepository = SecureStorageRepository();
+  final secureStorageApi = SecureStorageApi();
 
   runApp(App(
       auctionRepository: auctionRepository,
       authenticationRepository: authenticationRepository,
-      secureStorageRepository: secureStorageRepository));
+      secureStorageApi: secureStorageApi));
 }

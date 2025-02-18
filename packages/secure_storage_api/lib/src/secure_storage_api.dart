@@ -1,12 +1,11 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class SecureStorageRepository {
+class SecureStorageApi {
 
   final FlutterSecureStorage _flutterSecureStorage;
 
-  SecureStorageRepository({FlutterSecureStorage? flutterSecureStorage})
+  SecureStorageApi({FlutterSecureStorage? flutterSecureStorage})
       : _flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
-
 
   Future<String?> read(String key) async {
     return await _flutterSecureStorage.read(key: key);
@@ -14,10 +13,6 @@ class SecureStorageRepository {
 
   Future<void> write(String key, String value) async {
     await _flutterSecureStorage.write(key: key, value: value);
-  }
-
-  Future<void> delete(String key) async {
-    await _flutterSecureStorage.delete(key: key);
   }
 
   Future<void> clearAll() async {
