@@ -6,13 +6,22 @@ authentication system. It also supports caching mechanisms, dark theme and also 
 
 ## Features
 - **User Authentication**: Uses an Authentication Repository and a mocked HTTP handler. Authentication is simulated with random success/failure responses.
-- **VIN Search**: Users can search for vehicles using a VIN. Based on the VIN, the user may get a full match or a list of similar vehicles.
+- **VIN/Vehicle Search**: User can search for vehicles using a VIN. Based on the VIN, the user may get a full match or a list of similar vehicles.
 - **Auction Data**: Users can select vehicles and view their auction details.
 - **Caching**: Data is cached per VIN in the `VehicleSearchScreen` and per External ID (EID) in the `VehicleSelectionScreen`.
-- **State Management**: The application follows the BLoC architecture pattern for state management.
-- **VIN Validation**: A static validator checks user input based on Wikipedia and other online sources.
+- **State Management**: The application follows the BLoC architecture pattern for state management and handles UI states Consequently.
+- **VIN Validation**: A validator method checks user input based on Wikipedia and other online sources.
+- **Dark Theme**: Application theme can be changed to Dark or Light.
 
-## Project Structure
+## Architecture
+This project follows the **BLoC** (Business Logic Component) pattern for state management and also as the development architecture. It might be also similar to MVVM, because different layers in BLoC have a corresponding 
+layer in MVVM, for example the view layer is the same, external packages for repositories and APIs correspond to repositories and datasources in the model layer
+of MVVM, and bloc layer is also acting the same as view-model in MVVM. The reason why I have used BLoC the mentioned purposes is that it offers a structured and 
+testable way to manage complex state and business logic in Flutter, promoting maintainability and scalability by clearly separating business logic from UI. On the
+other hand it has also a very high number of reputation and popularity among the Flutter developers.
+***Following is the project structure***
+
+## Project Structure Overview
 ```
 lib/
 ├── app/
@@ -50,7 +59,7 @@ pubspec.yaml
 ..
 ```
 
-## Screen Flow and Features Overview:
+## Screen Flow and Features Overview
 
 ### Login Screen:
 In this screen user should enter it's username and password for the identification (authentication), for simulating a real situation username and password are arbitrary and 
@@ -78,10 +87,7 @@ If caching feature is enabled in the previous page, here it will also apply and 
 ### Auction Details Screen:
 This screen is responsible to show the Auction Details data, it is possible to come to this page directly from VIN search screen if the response is 200, or from Vehicle Search Screen
 when clicking on an option and receive a non error response. At the first glance, some important information of an auction/vehicle will be shown, and then user can click on the arrow
-icon to expand the box and see further details including the relevant dates etc. 
-
-
-
+icon to expand the box and see further details including the relevant dates etc.
 
 
 ## Testing
@@ -92,13 +98,6 @@ icon to expand the box and see further details including the relevant dates etc.
   flutter test
   ```
 - Note: `authentication_repository_test.dart` does not run visually but can be executed via the command line.
-
-## Architecture
-This project follows the **BLoC** (Business Logic Component) pattern for state management. BLoC provides a structured and testable way to manage complex business logic 
-in Flutter applications. It also resembles the **MVVM** pattern, where:
-- The **View** layer handles UI.
-- **Repositories & APIs** function as the Model layer.
-- **BLoC** components act as the ViewModel.
 
 ## VIN Validation
 - A static validator in `utils/data_validator.dart` checks user input.
@@ -120,7 +119,3 @@ in Flutter applications. It also resembles the **MVVM** pattern, where:
 - Username and password for the user identification (authentication) are arbitrary and everything can be entered. (the verification is on a random basis)
 - Cached data is only used when an exact VIN or EID match is found.
 - `CosChallenge` class cannot be instantiated, so it is not injected into `NetworkApiService`.
-
----
-
-This README provides an overview of the project structure, features, and development approach. Let me know if you'd like to refine any section! 🚀
