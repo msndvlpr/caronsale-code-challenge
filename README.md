@@ -117,7 +117,7 @@ icon to expand the box and see further details including the relevant dates etc.
 ## VIN Validation
 - A static validator in `utils/data_validator.dart` checks user input.
 - The validation logic is based on real-world VIN examples.
-- While accurate, it may not be 100% reliable.
+- While accurate, it may not be 100% reliable. (successfully tested with valid WBAYK510405N35485 vin)
 
 ## Running the Project
 1. Install Flutter dependencies:
