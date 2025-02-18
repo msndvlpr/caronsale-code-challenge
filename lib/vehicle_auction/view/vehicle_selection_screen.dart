@@ -6,12 +6,11 @@ import 'package:caronsale_code_challenge/vehicle_search/widget/bottom_nav_bar.da
 import 'package:caronsale_code_challenge/vehicle_search/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:network_api/network_api_service.dart';
 
-class AuctionVehicleSelectionScreen extends StatelessWidget {
+class VehicleSelectionScreen extends StatelessWidget {
   final VehicleOptionsEntity vehicleOptionsEntity;
 
-  const AuctionVehicleSelectionScreen({super.key, required this.vehicleOptionsEntity});
+  const VehicleSelectionScreen({super.key, required this.vehicleOptionsEntity});
 
   @override
   Widget build(BuildContext context) {

@@ -49,7 +49,7 @@ class VehicleSearchScreen extends StatelessWidget {
               } else if (state is AuctionDataStateMultipleChoice) {
                 ScaffoldMessenger.of(context).clearSnackBars();
                  final vehicleOptionsEntity = VehicleOptionsEntity.fromVehicleOptions(state.vehicleOptionItems);
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => AuctionVehicleSelectionScreen(vehicleOptionsEntity: vehicleOptionsEntity)));
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => VehicleSelectionScreen(vehicleOptionsEntity: vehicleOptionsEntity)));
 
               } else if (state is AuctionDataStateFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('An error occurred')));
